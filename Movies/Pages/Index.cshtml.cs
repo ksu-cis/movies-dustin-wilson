@@ -9,25 +9,33 @@ namespace Movies.Pages
 {
     public class IndexModel : PageModel
     {
-        MovieDatabase movieDatabase = new MovieDatabase();
+        [BindProperty]
+        public string search { get; set; }
+
+        [BindProperty]
+        public List<string> rating { get; set; } = new List<string>();
+
+        [BindProperty]
+        public float minIMBD { get; set; }
+
+        [BindProperty]
+        public float maxIMBD { get; set; } = 10;
 
         public List<Movie> Movies;
 
         public void OnGet()
         {
-            Movies = movieDatabase.All;
+            Movies = MovieDatabase.All;
         }
 
-        public void OnPost(string search, List<string> rating)
+        public void OnPost()
         {
-            if (search != null && rating.Count != 0)
-                Movies = movieDatabase.SearchAndFilter(search, rating);
-            else if (rating.Count != 0)
-                Movies = movieDatabase.Filter(rating);
-            else if (search != null)                                                                                                                                                                                                                
-                Movies = movieDatabase.Search(search);
-            else
-                Movies = movieDatabase.All;
+            Movies = MovieDatabase.FilterIMBD(minIMBD, maxIMBD);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
+            if (rating.Count != 0)
+                Movies = MovieDatabase.Filter(rating, Movies);
+            if (search != null)                                                                                                                                                                                                                
+                Movies = MovieDatabase.Search(search, Movies);
         }
     }
 }
